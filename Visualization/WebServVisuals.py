@@ -59,7 +59,7 @@ class WebServedVisual(object):
                                         funcname=inspect.currentframe().f_code.co_name,
                                         exception=ex)
 
-    def BuiltWebApp(self,
+    def ServeWebApp(self,
                     app:any,
                     fig:(FigureWidget | any),
                     debug:bool = True) ->  None:  
