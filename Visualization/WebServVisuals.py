@@ -83,20 +83,5 @@ class WebServedVisual(object):
                                         funcname=inspect.currentframe().f_code.co_name,
                                         exception=ex)
 
-
-
-
-
-
-
-
-
-
-    # Generate random data
-    #x, y, sz, cl = np.random.rand(4, 100)
-    #fig = px.scatter(x=x, y=y, size=sz, color=cl)
-
-    
-
 if __name__ == "__main__":
     WebServedVisual()
