@@ -1,6 +1,8 @@
 import inspect
 import plotly.express as px
+import plotly.graph_objects as go
 
+from plotly.subplots import make_subplots
 from Support.SupportProvider import SupportProvider
 
 class Visualizer():
@@ -8,12 +10,12 @@ class Visualizer():
     _class_name:str = None
     _support:SupportProvider = None
 
+
+    # Diese Methode ist der Konstruktor yeah 
     def __init__(self) -> None:  
         try:
             self._support = SupportProvider()
             self._class_name = __class__.__name__
-            
-            self.Execute()
         except Exception as ex:
             self._support.ExceptMessage(classname = self._class_name,
                                         funcname=inspect.currentframe().f_code.co_name,
@@ -28,9 +30,10 @@ class Visualizer():
                 print("Show Explained Variance")
             
             fig = px.bar(explained_variance, 
-                        x='PC', y='Explained Variance',
-                        text='Explained Variance',
-                        width=800)
+                         x='PC', 
+                         y='Explained Variance',
+                         text='Explained Variance',
+                         width=800)
 
             fig.update_traces(texttemplate='%{text:.3f}', textposition='outside')
             fig.show()
@@ -39,6 +42,95 @@ class Visualizer():
                                         funcname=inspect.currentframe().f_code.co_name,
                                         exception=ex)
                                         
+    def ShowCombinedVariance(   self,
+                                combined_variances:any,
+                                use_seperate_plot:bool = True,
+                                verbose:int = 0) -> None:  
+        try:
+
+            if (verbose > 0):
+                print("Shown combined (explained + cumulative) variances?")
+
+            cmlvarscatter = go.Scatter( x=combined_variances['PC'],
+                                        y=combined_variances['Cumulative Variance'],
+                                        marker=dict(size=15, 
+                                                    color="LightSeaGreen")
+                                        )
+
+            expvarscatter = go.Bar( x=combined_variances['PC'],
+                                    y=combined_variances['Explained Variance'],
+                                    marker=dict(color="RoyalBlue")
+                                    )
+            
+            if (not use_seperate_plot):
+                fig = go.Figure()
+                fig.add_trace(cmlvarscatter)
+                fig.add_trace(expvarscatter)
+            else:
+                fig = make_subplots(rows=1, cols=2)
+                fig.add_trace(cmlvarscatter, row=1, col=1)
+                fig.add_trace(expvarscatter, row=1, col=1)
+
+            fig.show()
+        except Exception as ex:
+            self._support.ExceptMessage(classname = self._class_name,
+                                        funcname=inspect.currentframe().f_code.co_name,
+                                        exception=ex)
+
+    def Show3DPrincipleComponents(  self,
+                                    scores:any,
+                                    use_tight:bool = False,
+                                    verbose:int = 0) -> None:  
+        try:
+
+            if (verbose > 0):
+                print("Show Principle components scatter 3D")
+            
+            fig = px.scatter_3d(scores, 
+                                x='PC1', 
+                                y='PC2', 
+                                z='PC3',
+                                color='Species',
+                                symbol='Species',
+                                opacity=0.5)
+
+            if(use_tight):
+                fig.update_layout(margin=dict(l=0, r=0, b=0, t=0))
+
+            fig.update_layout(template='seaborn') # "plotly", "plotly_white", "plotly_dark", "ggplot2", "seaborn", "simple_white", "none"
+
+            fig.show()
+        except Exception as ex:
+            self._support.ExceptMessage(classname = self._class_name,
+                                        funcname=inspect.currentframe().f_code.co_name,
+                                        exception=ex)
+
+    def Show3DLoadings( self,
+                        loadings:any,
+                        use_tight:bool = False,
+                        verbose:int = 0) -> None:  
+        try:
+
+            if (verbose > 0):
+                print("Show Loadings scatter 3D")
+            
+            loadings_label = loadings.index
+            fig = px.scatter_3d(loadings, 
+                                x='PC1', 
+                                y='PC2', 
+                                z='PC3',
+                                text = loadings_label)
+
+            if(use_tight):
+                fig.update_layout(margin=dict(l=0, r=0, b=0, t=0))
+
+            fig.update_layout(template='seaborn') # "plotly", "plotly_white", "plotly_dark", "ggplot2", "seaborn", "simple_white", "none"
+
+            fig.show()
+        except Exception as ex:
+            self._support.ExceptMessage(classname = self._class_name,
+                                        funcname=inspect.currentframe().f_code.co_name,
+                                        exception=ex)
 
 if __name__ == "__main__":
     Visualizer()

@@ -17,8 +17,7 @@ class DatasetProvider(object):
             print("Init DatasetProvider class")
             self._class_name = __class__.__name__
             self._support = SupportProvider()
-            
-            _iris = datasets.load_iris()
+            self._iris = datasets.load_iris()
 
         except Exception as ex:
             self._support.ExceptMessage(classname = self._class_name,

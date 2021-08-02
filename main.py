@@ -14,7 +14,7 @@ import inspect
 from Visualization.Visualizer import Visualizer
 from Dataset.DatasetProvider import DatasetProvider
 from Support.SupportProvider import SupportProvider
-from PCA.PrincipleComponentAnalysis import PrincipleComponentAnalysis, PrincipleComponentAnalysisProvider
+from PCA.PrincipleComponentAnalysis import PrincipleComponentAnalysisProvider
 
 class IrisPrincipleComponentAnalysis():
 
@@ -39,7 +39,6 @@ class IrisPrincipleComponentAnalysis():
                 verbose:int = 0) -> any:
 
         try:
-
             dp:DatasetProvider = DatasetProvider()
             pcap:PrincipleComponentAnalysisProvider = PrincipleComponentAnalysisProvider(pca_components=self._pca_components)
             vs:Visualizer = Visualizer()
@@ -53,20 +52,29 @@ class IrisPrincipleComponentAnalysis():
 
             if (verbose > 0): 
                 print("Start Principle Component Analysis.")
-
             
-            scores_df = pcap.PerformAnalysis(features=features)
+            scores = pcap.PerformAnalysis(features=features, species_dataframe=Species)
             loadings = pcap.getLoadingsValues(iris_feature_names=iris_feature_names)
             explained_variance = pcap.getExplainedVarianceData()
             cumulative_variance = pcap.getExplainedCumulativeData(explained_variance=explained_variance)
-            pca_explained_variances = pcap.CombinePCAVariances(pc_names=self._pc_names, 
-                                                               pc_col_name=self._pc_col_name,
-                                                               explained_variance=explained_variance, 
-                                                               cumulative_variance=cumulative_variance)
+            combined_variances = pcap.CombinePCAVariances(  pc_names=self._pc_names, 
+                                                            pc_col_name=self._pc_col_name,
+                                                            explained_variance=explained_variance, 
+                                                            cumulative_variance=cumulative_variance)
 
             if (verbose > 0): 
                 print("Start plotting Principle Component Analysis results.")
-            
+
+            vs.ShowExplainedVariance(explained_variance=combined_variances)
+
+            vs.ShowCombinedVariance(combined_variances=combined_variances, 
+                                    use_seperate_plot=True)
+
+            vs.Show3DPrincipleComponents(   scores=scores, 
+                                            use_tight=False)
+
+            vs.Show3DLoadings(  loadings=loadings, 
+                                use_tight=False)
             
 
         except Exception as ex:

@@ -1,32 +1,28 @@
-import inspect
 import pandas as pd      
 import numpy as np 
 
 from sklearn import decomposition
-from Support.SupportProvider import SupportProvider
 
 class PrincipleComponentAnalysisProvider(object):
 
-    _class_name:str = None
-    _support:SupportProvider = None
     _pca:any = None
+    _pca_columns:list = None
 
-    def __init__(self,
-                 pca_components:int = 3) -> None:  
+    def __init__(   self,
+                    pca_columns:list = ['', 'PC1', 'PC2', 'PC3'],
+                    pca_components:int = 3) -> None:  
         try:
 
-            print("Init PrincipleComponentAnalysis class")
-            self._class_name = __class__.__name__
-            self._support = SupportProvider()
+            print ("Init " + __class__.__name__+ " class")
+            self._pca_columns = pca_columns
             self._pca = decomposition.PCA(n_components=pca_components)
             
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def PerformAnalysis(self, 
                         features:any, 
+                        species_dataframe:any,
                         pca:any = None,
                         verbose:int = 0) -> any:
         try:
@@ -38,18 +34,18 @@ class PrincipleComponentAnalysisProvider(object):
         
             print(pca.fit(features))
 
-            scores = pca.transform(features)
-            scores_df = pd.DataFrame(scores, columns=['PC1', 'PC2', 'PC3'])
+            scores_df = pd.DataFrame(pca.transform(features), 
+                                     columns=self._pca_columns[1:])
+
+            scores = pd.concat([scores_df, species_dataframe], axis=1)
 
             if (verbose > 0): 
                 print("Compute and retrieve the scores values\n")
-                print(scores_df)
+                print(scores)
 
-            return scores_df
+            return scores
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def CombinePCAVariances(self, 
                             pc_names:list,
@@ -58,6 +54,8 @@ class PrincipleComponentAnalysisProvider(object):
                             cumulative_variance:any,
                             verbose:int = 0) -> any:
         try:
+            if (pc_names == None):
+                pc_names = self._pca_columns
 
             pc_df = pd.DataFrame(pc_names, columns=[pc_col_name])
             explained_variance_df = pd.DataFrame(explained_variance, columns=['Explained Variance'])
@@ -70,22 +68,18 @@ class PrincipleComponentAnalysisProvider(object):
 
             return pca_explained_variances
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def getPCA(self) -> any:
         try:
             return self._pca
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
-    def getLoadingsValues(self,
-                         pca:any, 
-                         iris_feature_names:any,
-                         verbose:int = 0) -> any:
+    def getLoadingsValues(  self,
+                            iris_feature_names:any,
+                            pca:any = None, 
+                            verbose:int = 0) -> any:
         try:
 
             if(pca == None): 
@@ -100,12 +94,10 @@ class PrincipleComponentAnalysisProvider(object):
 
             return df_loadings
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def getExplainedVarianceData(self,
-                                 pca:any, 
+                                 pca:any = None, 
                                  verbose:int = 0) -> any:
         try:
 
@@ -121,9 +113,7 @@ class PrincipleComponentAnalysisProvider(object):
             return  np.insert(explained_variance, 0, 0)
 
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def getExplainedCumulativeData(self,
                                  explained_variance:any, 
@@ -139,6 +129,4 @@ class PrincipleComponentAnalysisProvider(object):
             return cumulative_variance
 
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
