@@ -5,9 +5,7 @@ Resources:
 
 """
 
-
 import dash
-import inspect
 import numpy as np
 import plotly.express as px
 import dash_core_components as dcc
@@ -17,26 +15,18 @@ from base64 import b64encode
 from numpy.random import seed, rand
 from dash.dependencies import Input, Output
 from plotly.missing_ipywidgets import FigureWidget
-from Support.SupportProvider import SupportProvider
 
 class WebServedVisual(object):
 
-    _class_name:str = None
-    _support:SupportProvider = None
-
     def __init__(self) -> None:  
         try:
-
-            self._support = SupportProvider()
-            self._class_name = __class__.__name__
+            print ("Init " + __class__.__name__+ " class")
 
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def BuiltWebApp(self,
-                fig:(FigureWidget | any)) ->  any:  
+                    fig:(FigureWidget | any)) ->  any:  
         try:
             
             app = dash.Dash(__name__)
@@ -55,9 +45,7 @@ class WebServedVisual(object):
             return app
 
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def ServeWebApp(self,
                     app:any,
@@ -79,9 +67,7 @@ class WebServedVisual(object):
 
             app.run_server(debug=debug)
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
 if __name__ == "__main__":
     WebServedVisual()

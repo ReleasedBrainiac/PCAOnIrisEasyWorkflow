@@ -9,31 +9,24 @@ Resources:
 6. https://plotly.com/python/templates/
 
 """
-import inspect
-
 from Visualization.Visualizer import Visualizer
 from Dataset.DatasetProvider import DatasetProvider
-from Support.SupportProvider import SupportProvider
 from PCA.PrincipleComponentAnalysis import PrincipleComponentAnalysisProvider
 
 class IrisPrincipleComponentAnalysis():
 
-    _class_name:str = None
-    _support:SupportProvider = None
+    _ipca_class_name:str = None
     _pca_components:int = 3
     _pc_names:list = ['','PC1', 'PC2', 'PC3']
     _pc_col_name:str = 'PC'
 
     def __init__(self) -> None:  
         try:
-            self._support = SupportProvider()
-            self._class_name = __class__.__name__
+            print ("Init " + __class__.__name__+ " class")
             
             self.Execute()
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def Execute(self,
                 verbose:int = 0) -> any:
@@ -78,9 +71,7 @@ class IrisPrincipleComponentAnalysis():
             
 
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
 if __name__ == "__main__":
     IrisPrincipleComponentAnalysis()

@@ -1,28 +1,19 @@
-import inspect
 import pandas as pd 
 
 from sklearn import datasets
 from sklearn.preprocessing import scale
-from Support.SupportProvider import SupportProvider
 
 class DatasetProvider(object):
 
-    _class_name:str = None
-    _support:SupportProvider = None
     _iris:any = None
 
     def __init__(self) -> None:  
         try:
-
-            print("Init DatasetProvider class")
-            self._class_name = __class__.__name__
-            self._support = SupportProvider()
+            print ("Init " + __class__.__name__+ " class")
             self._iris = datasets.load_iris()
 
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def LoadIrisDataset(self, verbose:int = 0) -> any:
         try:
@@ -42,9 +33,7 @@ class DatasetProvider(object):
             return scale(features), targets
 
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def getSpecies(self, target, verbose:int = 0) -> any:
         try:
@@ -63,22 +52,16 @@ class DatasetProvider(object):
 
             return pd.DataFrame(targets_label, columns=['Species'])
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def getIrisFeatureNames(self) -> any:
         try:
-            return self.iris.feature_names
+            return self._iris.feature_names
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def getIrisTargetNames(self) -> any:
         try:
-            return self.iris.target_names
+            return self._iris.target_names
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise

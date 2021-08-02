@@ -1,25 +1,15 @@
-import inspect
 import plotly.express as px
 import plotly.graph_objects as go
 
 from plotly.subplots import make_subplots
-from Support.SupportProvider import SupportProvider
 
 class Visualizer():
 
-    _class_name:str = None
-    _support:SupportProvider = None
-
-
-    # Diese Methode ist der Konstruktor yeah 
     def __init__(self) -> None:  
         try:
-            self._support = SupportProvider()
-            self._class_name = __class__.__name__
+            print ("Init " + __class__.__name__+ " class")
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def ShowExplainedVariance(self,
                               explained_variance:any,
@@ -38,9 +28,7 @@ class Visualizer():
             fig.update_traces(texttemplate='%{text:.3f}', textposition='outside')
             fig.show()
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
                                         
     def ShowCombinedVariance(   self,
                                 combined_variances:any,
@@ -73,9 +61,7 @@ class Visualizer():
 
             fig.show()
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def Show3DPrincipleComponents(  self,
                                     scores:any,
@@ -101,9 +87,7 @@ class Visualizer():
 
             fig.show()
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
     def Show3DLoadings( self,
                         loadings:any,
@@ -128,9 +112,7 @@ class Visualizer():
 
             fig.show()
         except Exception as ex:
-            self._support.ExceptMessage(classname = self._class_name,
-                                        funcname=inspect.currentframe().f_code.co_name,
-                                        exception=ex)
+            raise
 
 if __name__ == "__main__":
     Visualizer()
