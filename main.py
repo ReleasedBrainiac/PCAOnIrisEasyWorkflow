@@ -69,7 +69,6 @@ class IrisPrincipleComponentAnalysis():
             vs.Show3DLoadings(  loadings=loadings, 
                                 use_tight=False)
             
-
         except Exception as ex:
             raise
 

@@ -11,7 +11,6 @@ class DatasetProvider(object):
         try:
             print ("Init " + __class__.__name__+ " class")
             self._iris = datasets.load_iris()
-
         except Exception as ex:
             raise
 
@@ -65,3 +64,6 @@ class DatasetProvider(object):
             return self._iris.target_names
         except Exception as ex:
             raise
+
+if __name__ == "__main__":
+    DatasetProvider()

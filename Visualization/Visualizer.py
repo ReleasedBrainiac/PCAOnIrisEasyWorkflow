@@ -51,13 +51,13 @@ class Visualizer():
                                     )
             
             if (not use_seperate_plot):
-                fig = go.Figure()
-                fig.add_trace(cmlvarscatter)
-                fig.add_trace(expvarscatter)
-            else:
                 fig = make_subplots(rows=1, cols=2)
                 fig.add_trace(cmlvarscatter, row=1, col=1)
                 fig.add_trace(expvarscatter, row=1, col=1)
+            else:
+                fig = go.Figure()
+                fig.add_trace(cmlvarscatter)
+                fig.add_trace(expvarscatter)
 
             fig.show()
         except Exception as ex:
